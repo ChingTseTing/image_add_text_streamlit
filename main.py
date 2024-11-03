@@ -58,10 +58,10 @@ if submit_button and uploaded_files is not None:
     processed_image_info.append(tmp.size)
     processed_file_name.append(i.name)
     # Create a download button for the processed image
-st.download_button(
-   label="Download Processed Image",
-    data=processed_image,
-    file_name="test", #f"processed_{i.name}",
-    mime="image/png"
-)
+    st.download_button(
+       label="Download Processed Image",
+        data=img_byte_arr,
+        file_name=f"processed_{i.name}",
+        mime="image/png"
+    )
 
