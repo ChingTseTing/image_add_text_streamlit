@@ -61,7 +61,7 @@ if submit_button and uploaded_files is not None:
 st.download_button(
    label="Download Processed Image",
     data=processed_image,
-    file_name="test" #f"processed_{i.name}",
+    file_name="test", #f"processed_{i.name}",
     mime="image/png"
 )
 
