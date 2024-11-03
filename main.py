@@ -11,7 +11,7 @@ def textsize(text, font):
     _, _, width, height = draw.textbbox((0, 0), text=text, font=font)
     return width, height
 
-FOLDER_PATH = "/content/drive/MyDrive/Colab_Notebooks/image_add_text"
+FOLDER_PATH = "./"
 FONTS="Harshita.ttf" #"Harshita.ttf"
 
 
