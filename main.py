@@ -37,8 +37,6 @@ if submit_button and uploaded_files is not None:
     draw = ImageDraw.Draw(tmp)
     font = ImageFont.truetype( font = os.path.join( FOLDER_PATH , "Fonts", FONTS)  , size = int(min(tmp.size[0],tmp.size[1])/40) )
 
-
-
     text_width, text_height =textsize(TEXT, font)
     crop_box = (  0.8*tmp.size[0] ,  0.7*tmp.size[1] ,  0.8*tmp.size[0] + text_width, 0.7*tmp.size[1] + text_height)
     cropped_image = tmp.crop(crop_box)
@@ -58,11 +56,12 @@ if submit_button and uploaded_files is not None:
     processed_image_info.append(tmp.size)
     processed_file_name.append(i.name)
     # Create a download button for the processed image
-    st.download_button(
+    dwd=st.download_button(
        label="Download Processed Image",
         data=img_byte_arr,
         file_name=f"processed_{i.name}",
         mime="image/png"
     )
+    
 
     st.write(st.session_state)
