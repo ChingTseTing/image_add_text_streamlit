@@ -37,9 +37,9 @@ processed_file_names = []
 if submit_button and uploaded_files:
     
      
-    for i in uploaded_files:
+    for i in range(len(uploaded_files)):
         # Open and process image
-        tmp = Image.open(i)
+        tmp = Image.open(uploaded_files[i])
         draw = ImageDraw.Draw(tmp)
         font = ImageFont.truetype(font=os.path.join(FOLDER_PATH, "Fonts", FONTS), size=int(min(tmp.size) / 40))
 
