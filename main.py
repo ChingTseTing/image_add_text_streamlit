@@ -13,7 +13,10 @@ def textsize(text, font):
     return width, height
 
 FOLDER_PATH = "./"
-FONT_FILES = os.listdir("./Fonts")
+FONT_FILES = []
+for i in os.listdir("./Fonts"):
+    if ".ttf" in  i :
+        FONT_FILES.append(i)
 
 st.title("Image add text")
 
