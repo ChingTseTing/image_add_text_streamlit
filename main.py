@@ -65,3 +65,5 @@ if submit_button and uploaded_files is not None:
     
 
     st.write(st.session_state)
+    if dwd:
+        st.write(st.session_state)
