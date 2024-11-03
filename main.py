@@ -65,3 +65,4 @@ if submit_button and uploaded_files is not None:
         mime="image/png"
     )
 
+    st.write(st.session_state)
