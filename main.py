@@ -36,7 +36,7 @@ processed_file_names = []
 # Process form submission
 if submit_button and uploaded_files:
     
-     
+    progress_bar = st.progress(0)
     for i in range(len(uploaded_files)):
         # Open and process image
         tmp = Image.open(uploaded_files[i])
@@ -58,7 +58,8 @@ if submit_button and uploaded_files:
         tmp.save(img_byte_arr, format='PNG')
         processed_images.append(img_byte_arr.getvalue())
         processed_file_names.append(f"processed_{uploaded_files[i].name}")
-       
+    
+        progress_bar.progress(i) 
         
     # Create a ZIP file with all processed images
     zip_buffer = io.BytesIO()
