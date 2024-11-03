@@ -57,7 +57,7 @@ if submit_button and uploaded_files:
         img_byte_arr = io.BytesIO()
         tmp.save(img_byte_arr, format='PNG')
         processed_images.append(img_byte_arr.getvalue())
-        processed_file_names.append(f"processed_{i.name}")
+        processed_file_names.append(f"processed_{uploaded_files[i].name}")
        
         
     # Create a ZIP file with all processed images
