@@ -4,6 +4,8 @@ from PIL import Image , ImageDraw , ImageFont
 import os
 from datetime import datetime
 import io
+import zipfile
+
 # https://stackoverflow.com/questions/77038132/python-pillow-pil-doesnt-recognize-the-attribute-textsize-of-the-object-imag
 def textsize(text, font):
     im = Image.new(mode="P", size=(0, 0))
@@ -56,18 +58,25 @@ if submit_button and uploaded_files is not None:
     processed_image_info.append(tmp.size)
     processed_file_name.append(i.name)
     # Create a download button for the processed image
-
     #st.download_button(
     #   label="Download Processed Image",
     #    data=img_byte_arr,
     #    file_name=f"processed_{i.name}",
     #    mime="image/png"
     #)
-for i in range(len(processed_image)):
-    st.write(f"Image size: {processed_image_info[i]}")
-    st.download_button(
-       label=str(i),
-        data=processed_image[i],
-        file_name=f"processed_{processed_file_name[i]}",
-        mime="image/png"
-    )
+#for i in range(len(processed_image)):
+#    st.write(f"Image size: {processed_image_info[i]}")
+#    st.download_button(
+#       label=str(i),
+#        data=processed_image[i],
+#        file_name=f"processed_{processed_file_name[i]}",
+#        mime="image/png"
+#    )
+
+
+st.download_button(
+    label="Download All Processed Images as One",
+    data=processed_image,
+    file_name="all_processed_images.png",
+    mime="image/png"
+)
