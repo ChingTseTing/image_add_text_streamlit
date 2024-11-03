@@ -13,7 +13,6 @@ def textsize(text, font):
     return width, height
 
 FOLDER_PATH = "./"
-FONTS = "Harshita.ttf"  # Path to your font file
 FONT_FILES = os.listdir("./Fonts")
 
 st.title("Image add text")
