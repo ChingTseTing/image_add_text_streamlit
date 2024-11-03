@@ -62,8 +62,6 @@ if submit_button and uploaded_files is not None:
         file_name=f"processed_{i.name}",
         mime="image/png"
     )
-    
-
     st.write(st.session_state)
-    if dwd:
-        st.write(st.session_state)
+if dwd:
+    st.write(st.session_state)
