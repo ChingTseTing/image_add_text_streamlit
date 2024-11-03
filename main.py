@@ -1,12 +1,11 @@
 import streamlit as st
 import numpy as np
-from PIL import Image , ImageDraw , ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import os
-from datetime import datetime
 import io
 import zipfile
 
-# https://stackoverflow.com/questions/77038132/python-pillow-pil-doesnt-recognize-the-attribute-textsize-of-the-object-imag
+# Function to calculate text size
 def textsize(text, font):
     im = Image.new(mode="P", size=(0, 0))
     draw = ImageDraw.Draw(im)
@@ -14,10 +13,11 @@ def textsize(text, font):
     return width, height
 
 FOLDER_PATH = "./"
-FONTS="Harshita.ttf" #"Harshita.ttf"
-
+FONTS = "Harshita.ttf"  # Path to your font file
 
 st.title("Image add text")
+
+# Form for user input
 with st.form(key='user_form'):
     TEXT = st.text_input("Enter your text to add")
     uploaded_files = st.file_uploader("Upload images", type=['jpg', 'jpeg', 'png'], accept_multiple_files=True)
@@ -25,43 +25,47 @@ with st.form(key='user_form'):
     y_frac = st.number_input(label="y location", min_value=0.0, max_value=1.0, value=0.9)
     submit_button = st.form_submit_button(label="Submit")
 
+# Processed images and info lists
+processed_images = []
+processed_file_names = []
 
-processed_image=[]
-processed_image_info=[]
-processed_file_name=[]
 # Process form submission
-if submit_button and uploaded_files is not None:
+if submit_button and uploaded_files:
+    for i in uploaded_files:
+        # Open and process image
+        tmp = Image.open(i)
+        draw = ImageDraw.Draw(tmp)
+        font = ImageFont.truetype(font=os.path.join(FOLDER_PATH, "Fonts", FONTS), size=int(min(tmp.size) / 40))
 
-  for i in uploaded_files :
-    tmp = Image.open(   i   )
-    draw = ImageDraw.Draw(tmp)
-    font = ImageFont.truetype( font = os.path.join( FOLDER_PATH , "Fonts", FONTS)  , size = int(min(tmp.size[0],tmp.size[1])/40) )
+        # Calculate text position and color based on brightness
+        text_width, text_height = textsize(TEXT, font)
+        crop_box = (0.8 * tmp.size[0], 0.7 * tmp.size[1], 0.8 * tmp.size[0] + text_width, 0.7 * tmp.size[1] + text_height)
+        cropped_image = tmp.crop(crop_box)
+        avg_brightness = np.mean(np.array(cropped_image.convert("L")))
+        text_color = (255, 255, 255) if avg_brightness < 128 else (0, 0, 0)
 
-    text_width, text_height =textsize(TEXT, font)
-    crop_box = (  0.8*tmp.size[0] ,  0.7*tmp.size[1] ,  0.8*tmp.size[0] + text_width, 0.7*tmp.size[1] + text_height)
-    cropped_image = tmp.crop(crop_box)
-    avg_brightness = np.mean(np.array(cropped_image.convert("L")))
-    text_color = (255, 255, 255) if avg_brightness < 128 else (0, 0, 0)
+        # Draw the text on the image
+        draw.text((x_frac * tmp.size[0], y_frac * tmp.size[1]), TEXT, font=font, fill=text_color)
 
-    draw.text( xy=( x_frac*tmp.size[0] , y_frac*tmp.size[1] ) , text = TEXT ,font=font , fill = text_color , thickness=5)
+        # Convert the processed image to bytes
+        img_byte_arr = io.BytesIO()
+        tmp.save(img_byte_arr, format='PNG')
+        processed_images.append(img_byte_arr.getvalue())
+        processed_file_names.append(f"processed_{i.name}")
 
-    #st.write(f"Image size: {tmp.size}")
+    # Create a ZIP file with all processed images
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED) as zip_file:
+        for img_data, filename in zip(processed_images, processed_file_names):
+            zip_file.writestr(filename, img_data)
+    
+    # Move to the beginning of the BytesIO buffer so it can be read from the start
+    zip_buffer.seek(0)
 
-    # Convert the processed image to bytes
-    img_byte_arr = io.BytesIO()
-    tmp.save(img_byte_arr, format='PNG')
-    img_byte_arr = img_byte_arr.getvalue()
-
-    processed_image.append(img_byte_arr)
-    processed_image_info.append(tmp.size)
-    processed_file_name.append(i.name)
-    # Create a download button for the processed image
-    dwd=st.download_button(
-       label="Download Processed Image",
-        data=img_byte_arr,
-        file_name=f"processed_{i.name}",
-        mime="image/png"
+    # Batch download button for all processed images in a ZIP file
+    st.download_button(
+        label="Download All Processed Images as ZIP",
+        data=zip_buffer,
+        file_name="processed_images.zip",
+        mime="application/zip"
     )
-    #st.write(st.session_state)
-#if dwd:
-#    st.write(st.session_state)
