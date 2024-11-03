@@ -14,12 +14,14 @@ def textsize(text, font):
 
 FOLDER_PATH = "./"
 FONTS = "Harshita.ttf"  # Path to your font file
+FONT_FILES = os.listdir("./Fonts")
 
 st.title("Image add text")
 
 # Form for user input
 with st.form(key='user_form'):
     TEXT = st.text_input("Enter your text to add",value="Iris Chong")
+    FONTS = st.selectbox("Choose an option:", FONT_FILES, values= "Harshita.ttf" )
     uploaded_files = st.file_uploader("Upload images", type=['jpg', 'jpeg', 'png'], accept_multiple_files=True)
     x_frac = st.number_input(label="x location", min_value=0.0, max_value=1.0, value=0.8)
     y_frac = st.number_input(label="y location (top/bottom: 0/1)", min_value=0.0, max_value=1.0, value=0.9)
