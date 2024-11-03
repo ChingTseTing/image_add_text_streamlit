@@ -66,7 +66,7 @@ if submit_button and uploaded_files is not None:
 for i in range(len(processed_image)):
     st.write(f"Image size: {processed_image_info[i]}")
     st.download_button(
-       label=i,
+       label=str(i),
         data=processed_image[i],
         file_name=f"processed_{processed_file_name[i]}",
         mime="image/png"
